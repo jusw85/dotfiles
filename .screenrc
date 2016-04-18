@@ -1,0 +1,10 @@
+# go to home dir
+chdir
+
+# Change default scrollback value for new windows
+defscrollback 10000
+
+# look and feel
+caption always "%{= bb}%{+b w}%n %t %h %=%l %H %c"
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+

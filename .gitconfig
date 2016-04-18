@@ -1,0 +1,10 @@
+[user]
+	email = justin.wong@senseinfosys.com
+	name = Justin Wong
+[credential]
+	helper = store
+[core]
+	excludesfile = ~/.gitignore
+[gui]
+	fontui = -family \"Bitstream Vera Sans\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
