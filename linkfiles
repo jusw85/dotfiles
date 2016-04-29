@@ -1,0 +1,5 @@
+#!/bin/bash
+
+INCLUDED_FILES=".bash_profile .bashrc .conkyrc .emacs .gitconfig .gitignore .screenrc .tmux.conf .vimrc"
+for i in $INCLUDED_FILES; do ln -sf $(pwd)/$i ~; done
+
