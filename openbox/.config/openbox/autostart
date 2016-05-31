@@ -1,0 +1,23 @@
+num_screens=$(xrandr | grep "\bconnected\b" | wc -l)
+if (( num_screens > 1 )); then
+    sh -c 'xrandr --output HDMI2 --auto --primary --output eDP1 --auto --right-of HDMI2'
+    conky &
+
+    devilspie2 &
+    urxvt -depth 32 -bg rgba:0000/0000/0000/8000 +sb -name "urxvt-vis" -fn "xft:Bitstream Vera Sans Mono:pixelsize=1" -e vis &
+    sleep 1
+    xdotool search "urxvt-vis" windowunmap --sync windowmap windowmove 1975 730 windowsize 460 225 &
+
+    xwinwrap -b -nf -ni -sp -st -ov -g 1920x1080+1920+0 -- /usr/lib/xscreensaver/glslideshow -root -zoom 100 -fade 2 -duration 3600 -window-id WID &
+fi
+
+xwinwrap -b -nf -ni -sp -st -ov -g 1920x1080+0+0 -- /usr/lib/xscreensaver/glslideshow -root -zoom 100 -fade 2 -duration 3600 -window-id WID &
+
+tint2 &
+compton -CGb
+redshift-gtk &
+xscreensaver -no-splash &
+~/.fehbg &
+synapse &
+volumeicon &
+synclient TouchPadOff=1

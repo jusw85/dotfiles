@@ -7,13 +7,18 @@
 
 alias ls='ls --color=auto'
 alias ll='ls -al'
+alias la='ls -Al'
 alias grep='grep --color=auto'
 alias mpsyt='mpsyt set player mpv'
 alias cal='cal -s'
 PS1='[\u@\h \W]\$ '
 
 stty -ixon -ixoff
+archey3
+eval $(thefuck --alias)
+alias f='fuck'
 
+export TERM=xterm-256color
 export EDITOR="vim"
 export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
 

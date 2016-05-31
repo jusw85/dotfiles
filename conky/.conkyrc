@@ -42,7 +42,8 @@ conky.config = {
     gap_x = 1980,
     gap_y = 60,
     minimum_height = 5,
-	minimum_width = 5,
+	minimum_width = 450,
+	maximum_width = 450,
     net_avg_samples = 2,
     no_buffers = true,
     out_to_console = false,
@@ -51,7 +52,9 @@ conky.config = {
     own_window = true,
     own_window_class = 'Conky',
     own_window_type = 'desktop',
-    own_window_transparent = true,
+	own_window_argb_visual = true,
+	own_window_argb_value = 128,
+    own_window_transparent = false,
     stippled_borders = 0,
     update_interval = 1.0,
     uppercase = false,
@@ -88,6 +91,9 @@ ${color lightgrey} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
 ${color lightgrey} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
 $hr
 ${execpi 60 DAY_RAW=$(date +%_d); DAY=$(printf "%3s" $DAY_RAW); cal -s -n 2 | sed "s/$DAY\( .\{20\}\)/"'${color red}'"$DAY"'${color lightgrey}'"\\1/"}
+$hr
+${if_running spotify}${scroll 32 ${texeci 5 spotify-now-playing}}
+${endif}
 ]]
 --${execpi 60 DAY_RAW=$(date +%_d); DAY=$(printf "%3s" $DAY_RAW); cal -s -n 2 | sed "s/$DAY\(.\{21\}\)/"'${color red}'"$DAY"'${color lightgrey}'"\\1/"}
 --${execpi 60 MTH=$(date +%m); for ((i=$[$MTH+1];i<=$[$MTH+1];i++)); do echo $i; done}
