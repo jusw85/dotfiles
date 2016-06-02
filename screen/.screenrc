@@ -1,4 +1,8 @@
-# go to home dir
+# Sample init lines
+# chdir /home/user/dir0
+# screen -t "dir0" 0
+# chdir /home/user/dir1
+# screen -t "dir1" 1
 chdir
 
 # Change default scrollback value for new windows
@@ -7,4 +11,3 @@ defscrollback 10000
 # look and feel
 caption always "%{= bb}%{+b w}%n %t %h %=%l %H %c"
 hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
-
