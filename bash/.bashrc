@@ -14,9 +14,13 @@ alias cal='cal -s'
 PS1='[\u@\h \W]\$ '
 
 stty -ixon -ixoff
-archey3
-eval $(thefuck --alias)
-alias f='fuck'
+if type "archey3" 2> /dev/null; then
+  archey3
+fi
+if type "thefuck" 2> /dev/null; then
+  eval $(thefuck --alias)
+  alias f='fuck'
+fi
 
 export TERM=xterm-256color
 export EDITOR="vim"
