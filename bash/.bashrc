@@ -11,13 +11,16 @@ alias la='ls -Al'
 alias grep='grep --color=auto'
 alias mpsyt='mpsyt set player mpv'
 alias cal='cal -s'
+alias mux='tmuxinator'
+alias crontab='fcrontab'
+# alias chromium='chromium --disable-gpu-compositing'
 PS1='[\u@\h \W]\$ '
 
 stty -ixon -ixoff
-if type "archey3" 2> /dev/null; then
+if type "archey3" &> /dev/null; then
   archey3
 fi
-if type "thefuck" 2> /dev/null; then
+if type "thefuck" &> /dev/null; then
   eval $(thefuck --alias)
   alias f='fuck'
 fi
@@ -101,3 +104,12 @@ elif type compctl &>/dev/null; then
   compctl -K _npm_completion npm
 fi
 ###-end-npm-completion-###
+
+function colorecho {
+    echo "$(tput setaf 6)$(tput bold)$1$(tput sgr0)"
+}
+
+# if [ -d "$HOME/local/bin" ] ; then
+#     PATH="$PATH:$HOME/local/bin"
+# fi
+# export PYTHONPATH="/home/user/local/lib/python3.5/site-packages"
