@@ -113,3 +113,5 @@ function colorecho {
 #     PATH="$PATH:$HOME/local/bin"
 # fi
 # export PYTHONPATH="/home/user/local/lib/python3.5/site-packages"
+
+source /usr/bin/virtualenvwrapper.sh

@@ -39,7 +39,7 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>Clearlooks</name>
+    <name>TissueBox-Wolf</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
@@ -778,7 +778,6 @@
         <height>40%</height>
       </size>
     </application>
- 
     <!--
   # this is an example with comments through out. use these to make your
   # own rules, but without the comments of course.
