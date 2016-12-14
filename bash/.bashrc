@@ -114,4 +114,6 @@ function colorecho {
 # fi
 # export PYTHONPATH="/home/user/local/lib/python3.5/site-packages"
 
-source /usr/bin/virtualenvwrapper.sh
+if [ -f /usr/bin/virtualenvwrapper.sh ]; then
+    source /usr/bin/virtualenvwrapper.sh
+fi

@@ -1,8 +1,9 @@
 num_screens=$(xrandr | grep "\bconnected\b" | wc -l)
 if (( num_screens > 1 )); then
-    sh -c 'xrandr --output HDMI2 --auto --primary --output eDP1 --auto --right-of HDMI2'
+    sh -c 'xrandr --output DP-2 --auto --primary --output eDP-1 --auto --left-of DP-2'
     conky &
 
+    synclient TouchPadOff=1
     devilspie2 &
     urxvt -depth 32 -bg rgba:0000/0000/0000/8000 +sb -name "urxvt-vis" -fn "xft:Bitstream Vera Sans Mono:pixelsize=1" -e vis &
     sleep 1
@@ -20,4 +21,6 @@ xscreensaver -no-splash &
 ~/.fehbg &
 synapse &
 volumeicon &
-synclient TouchPadOff=1
+
+xset m 1 1
+xinput --set-prop "pointer:Razer Razer Abyssus 1800" "Device Accel Constant Deceleration" 2
