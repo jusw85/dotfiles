@@ -381,6 +381,17 @@
         <monitor>prev</monitor>
       </action>
     </keybind>
+    <keybind key="XF86MonBrightnessUp">
+      <action name="Execute">
+        <command>light -A 10</command>
+      </action>
+    </keybind>
+    <keybind key="XF86MonBrightnessDown">
+      <action name="Execute">
+        <command>light -U 10</command>
+      </action>
+    </keybind>
+    <!-- W-s modifier -->
     <keybind key="W-s">
       <keybind key="W-Left">
         <action name="Execute">
@@ -400,16 +411,6 @@
       <keybind key="W-Up">
         <action name="Execute">
           <command>terminator --command="playerctl --player=spotify metadata | sed -e 's/&gt;, /&gt;, \n/g'; read"</command>
-        </action>
-      </keybind>
-      <keybind key="XF86MonBrightnessUp">
-        <action name="Execute">
-          <command>light -A 10</command>
-        </action>
-      </keybind>
-      <keybind key="XF86MonBrightnessDown">
-        <action name="Execute">
-          <command>light -U 10</command>
         </action>
       </keybind>
     </keybind>
