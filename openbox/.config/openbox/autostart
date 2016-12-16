@@ -21,6 +21,7 @@ xscreensaver -no-splash &
 ~/.fehbg &
 synapse &
 volumeicon &
+parcellite -d &
 
 xset m 1 1
 xinput --set-prop "pointer:Razer Razer Abyssus 1800" "Device Accel Constant Deceleration" 2
