@@ -64,4 +64,8 @@ fi
 #export DRI_PRIME=1
 #sh -c 'xrandr --setprovideroffloadsink nouveau Intel'
 
+if type "numlockx" &> /dev/null; then
+    numlockx &
+fi
+
 exec openbox-session
