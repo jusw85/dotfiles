@@ -1,8 +1,8 @@
 #!/bin/sh
 
-xrandr --setprovideroutputsource modesetting NVIDIA-0
-xrandr --auto
-xrandr --dpi 96
+#xrandr --setprovideroutputsource modesetting NVIDIA-0
+#xrandr --dpi 96
+#xrandr --auto
 
 userresources=$HOME/.Xresources
 usermodmap=$HOME/.Xmodmap
@@ -68,4 +68,5 @@ if type "numlockx" &> /dev/null; then
     numlockx &
 fi
 
+/usr/bin/prime-offload
 exec openbox-session

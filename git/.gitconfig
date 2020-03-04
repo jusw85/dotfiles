@@ -8,3 +8,18 @@
 [gui]
 	fontui = -family \"Bitstream Vera Sans\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+[guitool "diff file"]
+    cmd = git difftool -y \"$FILENAME\"
+    noconsole = yes
+    needsfile = yes

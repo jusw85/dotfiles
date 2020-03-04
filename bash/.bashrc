@@ -14,6 +14,17 @@ alias cal='cal -s'
 alias mux='tmuxinator'
 alias crontab='fcrontab'
 # alias chromium='chromium --disable-gpu-compositing'
+
+aur() {
+  if [[ "$1" == "sync" ]]; then
+    command aur sync -c -D /mnt/hdd/packages/chroot/ --ignore-file=/home/user/.config/aurutils/ignore "$@"
+  elif [[ "$1" == "build" ]]; then
+    command aur build -c -D /mnt/hdd/packages/chroot/ "$@"
+  else
+    command aur "$@"
+  fi
+}
+
 PS1='[\u@\h \W]\$ '
 
 stty -ixon -ixoff
@@ -27,7 +38,9 @@ fi
 
 export TERM=xterm-256color
 export EDITOR="vim"
+export DIFFPROG="meld"
 export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
+export LESSHISTFILE=
 
 eval $(dircolors -b)
 
@@ -117,3 +130,5 @@ function colorecho {
 if [ -f /usr/bin/virtualenvwrapper.sh ]; then
     source /usr/bin/virtualenvwrapper.sh
 fi
+
+source /home/user/.config/broot/launcher/bash/br

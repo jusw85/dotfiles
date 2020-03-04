@@ -12,7 +12,15 @@ fi
 #fi
 
 if [ -d "$HOME/.node/bin" ] ; then
-    PATH="$PATH:$HOME/.node/bin"
+    PATH="$HOME/.node/bin:$PATH"
+fi
+
+if [ -d "$HOME/.gem/ruby/2.5.0/bin" ] ; then
+    PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 fi
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+source /home/user/.config/broot/launcher/bash/br

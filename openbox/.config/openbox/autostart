@@ -1,27 +1,43 @@
 num_screens=$(xrandr | grep "\bconnected\b" | wc -l)
 if (( num_screens > 1 )); then
-    sh -c 'xrandr --output DP-2 --auto --primary --output eDP-1 --auto --left-of DP-2'
-    conky &
+    #sh -c 'xrandr --output DP-1-2 --auto --primary --output eDP-1-1 --auto --left-of DP-1-2'
+
+    if xrandr | grep -q 'eDP-1-1'; then
+        sh -c 'xrandr --output DP-1-2 --auto --primary --output eDP-1-1 --off'
+    elif xrandr | grep -q 'eDP-1'; then
+        sh -c 'xrandr --output DP-2 --auto --primary --output eDP-1 --off'
+    fi
 
     synclient TouchPadOff=1
-    devilspie2 &
-    urxvt -depth 32 -bg rgba:0000/0000/0000/8000 +sb -name "urxvt-vis" -fn "xft:Bitstream Vera Sans Mono:pixelsize=1" -e vis &
-    sleep 1
-    xdotool search "urxvt-vis" windowunmap --sync windowmap windowmove 1975 730 windowsize 460 225 &
 
-    xwinwrap -b -nf -ni -sp -st -ov -g 1920x1080+1920+0 -- /usr/lib/xscreensaver/glslideshow -root -zoom 100 -fade 2 -duration 3600 -window-id WID &
+    # conky &
+
+    # devilspie2 &
+    # urxvt -depth 32 -bg rgba:0000/0000/0000/8000 +sb -name "urxvt-vis" -fn "xft:Bitstream Vera Sans Mono:pixelsize=1" -e vis &
+    # sleep 1
+    # xdotool search "urxvt-vis" windowunmap --sync windowmap windowmove 1975 730 windowsize 460 225 &
+    # xwinwrap -b -nf -ni -sp -st -ov -g 1920x1080+1920+0 -- /usr/lib/xscreensaver/glslideshow -root -zoom 100 -fade 2 -duration 3600 -window-id WID &
 fi
 
-xwinwrap -b -nf -ni -sp -st -ov -g 1920x1080+0+0 -- /usr/lib/xscreensaver/glslideshow -root -zoom 100 -fade 2 -duration 3600 -window-id WID &
+# xwinwrap -b -nf -ni -sp -st -ov -g 1920x1080+0+0 -- /usr/lib/xscreensaver/glslideshow -root -zoom 100 -fade 2 -duration 3600 -window-id WID &
 
 tint2 &
-compton -CGb
-redshift-gtk &
-xscreensaver -no-splash &
-~/.fehbg &
-synapse &
-volumeicon &
-parcellite -d &
 
-xset m 1 1
-xinput --set-prop "pointer:Razer Razer Abyssus 1800" "Device Accel Constant Deceleration" 2
+picom -b
+# compton -CGb
+# xscreensaver -no-splash &
+
+# synapse &
+# volumeicon &
+pasystray &
+parcellite -d &
+optimus-manager-qt &
+
+# ~/.fehbg &
+# redshift-gtk &
+redshift -P -O 3000
+
+# xset m 1 1
+# xinput --set-prop "pointer:Razer Razer Abyssus 1800" "libinput Accel Speed" -0.5
+xinput --set-prop "pointer:Razer Razer Abyssus 1800" 'libinput Accel Profile Enabled' 0, 1
+xinput --set-prop "pointer:Razer Razer Abyssus 1800" 'Coordinate Transformation Matrix' 0.65 0 0 0 0.65 0 0 0 1
