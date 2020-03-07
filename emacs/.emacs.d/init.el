@@ -17,7 +17,7 @@
  '(delete-selection-mode t)
  '(desktop-save-mode t)
  '(dired-dwim-target t)
- '(dired-listing-switches "-alh")
+ '(dired-listing-switches "-alh --group-directories-first")
  '(dired-recursive-copies (quote always))
  '(dired-recursive-deletes (quote always))
  '(global-linum-mode t)
@@ -31,12 +31,18 @@
  '(indent-tabs-mode nil)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount (quote (3 ((shift) . 1) ((control)))))
+ '(package-archives
+   (quote
+    (("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa-stable" . "https://stable.melpa.org/packages/"))))
+ '(package-selected-packages (quote (auto-complete magit org use-package)))
  '(scroll-conservatively most-positive-fixnum)
  '(scroll-error-top-bottom t)
  '(show-paren-delay 0)
  '(show-paren-mode t)
  '(show-paren-style (quote parenthesis))
- '(tab-width 4))
+ '(tab-width 4)
+ '(vc-follow-symlinks t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -49,6 +55,13 @@
             '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+; Customisation of diff-buffer-with-file, which prompts generically for any buffer
+(defun diff-this-buffer-with-file ()
+  "View the differences between current buffer and its associated file.
+This requires the external program `diff' to be in your `exec-path'."
+  (interactive)
+  (diff buffer-file-name (current-buffer) nil 'noasync))
 
 ;; Custom global menu
 (define-key-after
@@ -69,14 +82,17 @@
 (define-key-after
   global-map
   [menu-bar mymenu ibuffer]
-  '("Interactive buffer" . ibuffer))
+  '("Interactive list buffers" . ibuffer))
 
-; Customisation of diff-buffer-with-file, which prompts generically for any buffer
-(defun diff-this-buffer-with-file ()
-  "View the differences between current buffer and its associated file.
-This requires the external program `diff' to be in your `exec-path'."
-  (interactive)
-  (diff buffer-file-name (current-buffer) nil 'noasync))
+(define-key-after
+  global-map
+  [menu-bar mymenu read-only]
+  '("Read only mode" . read-only-mode))
+
+(define-key-after
+  global-map
+  [menu-bar mymenu autocomplete]
+  '("Autocomplete mode" . auto-complete-mode))
 
 (define-key-after
   global-map
@@ -117,6 +133,18 @@ This requires the external program `diff' to be in your `exec-path'."
 
 (setq dired-deletion-confirmer 'y-or-n-p)
 
+;; Packages
+(unless (package-installed-p 'use-package)
+    (progn
+      (package-refresh-contents)
+      (package-install 'use-package)))
+
+(use-package magit
+  :ensure t)
+
+(use-package auto-complete
+  :ensure t)
+
 
 ;; Misc stuff
 
@@ -125,13 +153,6 @@ This requires the external program `diff' to be in your `exec-path'."
 
 ;; Unused
 
-;; (unless (package-installed-p 'use-package)
-;;     (progn
-;;       (package-refresh-contents)
-;;       (package-install 'use-package)))
-
-;; (use-package auto-complete
-;;   :ensure t)
 
  ;; '(auto-save-file-name-transforms (backquote ((".*" (\, temporary-file-directory) t))))
  ;; '(custom-enabled-themes nil)
@@ -139,13 +160,8 @@ This requires the external program `diff' to be in your `exec-path'."
  ;; '(custom-theme-load-path
  ;;   (quote
  ;;    ("~/.emacs.d/emacs-color-theme-solarized" custom-theme-directory t)))
- ;; '(package-archives
- ;;   (quote
- ;;    (("gnu" . "http://elpa.gnu.org/packages/")
- ;;     ("melpa" . "https://melpa.org/packages/"))))
- ;; '(package-enable-at-startup nil)
  ;; '(use-package-always-ensure t)
- ;; '(vc-follow-symlinks t)
+ ;; '(package-enable-at-startup nil)
  ;; '(whitespace-style
  ;;   (quote
  ;;    (face tabs spaces trailing space-before-tab newline indentation empty space-after-tab space-mark tab-mark newline-mark))))

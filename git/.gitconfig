@@ -23,3 +23,5 @@
     cmd = git difftool -y \"$FILENAME\"
     noconsole = yes
     needsfile = yes
+[status]
+    showUntrackedFiles = all
