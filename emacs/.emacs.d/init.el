@@ -16,14 +16,18 @@
  '(column-number-mode t)
  '(custom-enabled-themes (quote (adwaita)))
  '(delete-selection-mode t)
+ '(delete-trailing-lines nil)
  '(desktop-save-mode t)
  '(dired-dwim-target t)
  '(dired-listing-switches "-alh --group-directories-first")
  '(dired-omit-files "^\\.?#\\|^\\.[^\\.]")
  '(dired-recursive-copies (quote always))
  '(dired-recursive-deletes (quote always))
+ '(eyebrowse-mode t)
  '(fill-column 80)
- '(global-linum-mode t)
+ '(git-commit-summary-max-length 50)
+ '(global-display-line-numbers-mode t)
+ '(global-linum-mode nil)
  '(golden-ratio-mode nil)
  '(horizontal-scroll-bar-mode t)
  '(hscroll-step 1)
@@ -35,6 +39,7 @@
  '(indent-tabs-mode nil)
  '(isearch-allow-scroll t)
  '(lazy-highlight-initial-delay 0)
+ '(minimap-mode t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount (quote (3 ((shift) . 1) ((control)))))
  '(org-support-shift-select t)
@@ -46,7 +51,9 @@
      ("melpa" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (golden-ratio golden-ratio-scroll-screen dired-ranger crux dired-subtree auto-complete magit org use-package)))
+    (eyebrowse visual-regexp golden-ratio golden-ratio-scroll-screen dired-ranger crux dired-subtree auto-complete magit org use-package)))
+ '(reb-re-syntax (quote string))
+ '(require-final-newline (quote ask))
  '(scroll-conservatively most-positive-fixnum)
  '(scroll-error-top-bottom t)
  '(sentence-end-double-space nil)
@@ -96,6 +103,20 @@
 (use-package golden-ratio
   :ensure t)
 
+(use-package visual-regexp
+  :ensure t)
+
+(use-package eyebrowse
+  :ensure t)
+
+
+;; emacs 27 todos:
+;; so-long-mode for long lines
+;; .config/emacs.d move to XDG folders
+;; test isearch improvements
+;; remove package-initialise
+;; tab-bar and tab-menu
+;; project.el
 
 (setq frame-title-format
       (setq icon-title-format
@@ -111,56 +132,59 @@ This requires the external program `diff' to be in your `exec-path'."
   (interactive)
   (diff buffer-file-name (current-buffer) nil 'noasync))
 
+;; wraparound search forwards
+(defun isearch-repeat-forward+ ()
+  (interactive)
+  (unless isearch-forward
+    (goto-char isearch-other-end))
+  (isearch-repeat-forward)
+  (unless isearch-success
+    (isearch-repeat-forward)))
+
+;; wraparound search backwards
+(defun isearch-repeat-backward+ ()
+  (interactive)
+  (when (and isearch-forward isearch-other-end)
+    (goto-char isearch-other-end))
+  (isearch-repeat-backward)
+  (unless isearch-success
+    (isearch-repeat-backward)))
+
+
+;; describe-personal-keybindings to review
 ;; Remap keys
-;; originally suspend-frame
-(global-set-key (kbd "C-z") 'undo)
-
-;; originally undo
-(global-set-key (kbd "C-/") 'comment-line)
-
-;; TODO: remap this
-(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
-(global-set-key (kbd "<home>") 'crux-move-beginning-of-line)
-(global-set-key (kbd "C-k") 'crux-smart-kill-line)
-
-;; originally isearch-forward
-(global-set-key (kbd "C-s") 'save-buffer)
-
-;; originally forward-char
-(global-set-key (kbd "C-f") 'isearch-forward)
-(define-key
-  isearch-mode-map
-  (kbd "C-f")
-  'isearch-repeat-forward)
-
-;; TODO: remap this
-(global-set-key (kbd "C-r") nil)
-
-;; (define-key
-;;   isearch-mode-map
-;;   (kbd "C-r")
-;;   'isearch-repeat-forward)
-
-;; originally scroll-up-command, scroll-down-command
-(global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "M-v") 'yank-pop)
-
-;; scroll-right
-(global-set-key (kbd "C-<prior>") 'previous-buffer)
-;; scroll-left
-(global-set-key (kbd "C-<next>") 'next-buffer)
-
-;; next-line
-(global-set-key (kbd "C-n") 'make-frame-command)
+(bind-key "C-z" 'undo)
+(bind-key "C-/" 'comment-line)
+(bind-key "<home>" 'crux-move-beginning-of-line)
+(bind-key "C-k" 'crux-smart-kill-line)
+(bind-key "C-s" 'save-buffer)
+(bind-key "C-f" 'isearch-forward)
+(bind-key "C-v" 'yank)
+(bind-key "M-v" 'yank-pop)
+(bind-key "C-<prior>" 'next-buffer)
+(bind-key "C-<next>" 'previous-buffer)
+(bind-key "C-n" 'make-frame-command)
+(bind-key "C-r" 'vr/query-replace)
 
 (define-key global-map (kbd "C-1") (make-sparse-keymap))
-(global-set-key (kbd "C-1 C-3") 'split-window-right)
-(global-set-key (kbd "C-1 C-2") 'delete-window)
-(global-set-key (kbd "C-1 C-1") 'delete-other-windows)
+(bind-key "C-1 C-3" 'split-window-right)
+(bind-key "C-1 C-2" 'delete-window)
+(bind-key "C-1 C-1" 'delete-other-windows)
 
 (define-key global-map (kbd "C-4") (make-sparse-keymap))
-(global-set-key (kbd "C-4 C-1") 'dired-jump)
-(global-set-key (kbd "C-4 C-2") 'magit)
+(bind-key "C-4 C-1" 'dired-jump)
+(bind-key "C-4 C-2" 'magit)
+
+(bind-key "C-f" 'isearch-repeat-forward+ isearch-mode-map)
+(bind-key "C-r" 'isearch-repeat-backward+ isearch-mode-map)
+(bind-key "C-v" 'isearch-yank-kill isearch-mode-map)
+(bind-key "C-d" 'isearch-forward-symbol-at-point isearch-mode-map)
+
+;; TODO: unused keybind
+(bind-key "C-a" 'crux-move-beginning-of-line)
+
+;; global-set-key can be used interactively for temp keybindings
+
 
 ;; Custom global menu
 (define-key-after
@@ -172,6 +196,7 @@ This requires the external program `diff' to be in your `exec-path'."
   global-map
   [menu-bar mymenu whitespace]
   '("Whitespace Mode" . whitespace-mode))
+;; (bind-key [menu-bar mymenu whitespace] '("Whitespace Mode" . whitespace-mode))
 
 (define-key-after
   global-map
@@ -212,6 +237,12 @@ This requires the external program `diff' to be in your `exec-path'."
   global-map
   [menu-bar mymenu remove-search-highlight]
   '("Remove Search Highlight" . lazy-highlight-cleanup))
+
+(define-key-after
+  global-map
+  [menu-bar mymenu redefine-key]
+  '("Redefine key" . global-set-key))
+
 
 ;; ========================================
 ;; Custom dired menu
@@ -311,12 +342,18 @@ This requires the external program `diff' to be in your `exec-path'."
   [menu-bar mymagitmenu magitclean]
   `("Clean untracked" . magit-clean))
 
+(add-hook 'git-commit-setup-hook (lambda () (set-fill-column 72)))
+
+;; ========================================
 ;; Dired subtree
+;; ========================================
 (define-key
   dired-mode-map
   (kbd "TAB")
   ;; 'dired-subtree-toggle-my)
   'dired-subtree-toggle)
+
+(bind-key "<backtab>" 'dired-subtree-cycle dired-mode-map)
 
 ;; Misc stuff
 
