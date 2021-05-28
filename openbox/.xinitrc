@@ -68,5 +68,5 @@ if type "numlockx" &> /dev/null; then
     numlockx &
 fi
 
-/usr/bin/prime-offload
+#/usr/bin/prime-offload
 exec openbox-session

@@ -1,0 +1,32 @@
+# stow
+rsync -avR bin dotfiles/scripts
+rm -rf bin
+stow -d ~/dotfiles scripts
+
+
+# xdg-mime
+# shared-mime-info package
+# update-mime-database /usr/share/mime
+xdg-mime query filetype <file>
+file --mime-type <file>
+file --mime <file>
+gio info <file>
+gio mime image/x-aseprite
+xdg-open <file>
+
+
+# disable/enable wireless/bluetooth
+rfkill list
+rfkill block all
+nmcli
+nmtui
+
+
+# etc
+paclog-pkglist
+fuseiso <image> <dir>
+kbdrate
+mkcert
+g++ gl.cpp -o gl -lGL -lGLU -lglut
+g++ -lSDL -lSDL_image main.cpp
+gcc in1.cpp in2.cpp -o out -lm -lGL -lGLU -lglut -lglfw -lGLEW

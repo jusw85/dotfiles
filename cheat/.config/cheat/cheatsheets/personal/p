@@ -1,0 +1,86 @@
+# mount remote_user@remote_ip:remote_path local_path
+# by default only this user can access files
+# -o allow_root allows root to also access mounted folder
+sshfs user@192.168.0.98:/mnt/hdd/ /mnt/hdd2 -o allow_root
+
+# unmount sshfs
+fusermount3 -u /mnt/hdd2
+
+
+cat /var/log/pacman.log | fzf +s --tac
+
+
+# bound to C-g C-g, C-M-e to expand
+$(cheat p | fzf)
+
+
+# remove orphans
+pacman -Qtdq | sudo pacman -Rns -
+
+
+aur sync -c -D /mnt/hdd/packages/chroot/ --ignore-file=/home/user/.config/aurutils/ignore -u && sudo pacman -Syu #update
+aur sync -u && sudo pacman -Syu #update
+sudo pacman -Syu #update
+sudo pacman --config /etc/pacman-custom.conf -Syu
+sudo pacman -Scc
+
+
+# list all environment variables
+printenv
+
+
+# manage multiple monitors
+xrandr
+lxrandr
+
+
+# etc
+npm update -g
+
+shellcheck script
+archlinux-java set java-8-openjdk
+xfreerdp +drives /sound /u:user /p: /w:1920 /h:1080 /v:192.168.0.84:3389
+xfreerdp +drives /sound:sys:alsa /u:user /p: /w:1920 /h:1080 /v:192.168.0.84:3389
+xfreerdp +drives /sound:sys:pulse /u:user /p: /w:1920 /h:1080 /v:192.168.0.84:3389
+
+gnirehtet run
+scrcpy --turn-screen-off -s 33b7a50a0804
+
+env LD_PRELOAD=/usr/lib/spotify-adblock.so spotify -no-zygote
+youtube-dl "https://www.youtube.com/watch?v=<id>" --extract --audio-quality 0 --prefer-ffmpeg
+gallery-dl -d /mnt/hdd/files/yona/gallery-dl "https://mangadex.org/chapter/<id>"
+xdotool search --name "name" type "restore"
+WID=$(xdotool search "name"); xdotool windowactivate --sync $WID; for i in {0..10}; do xdotool type "z"; xdotool key Return; done
+sleep 3; xdotool click --repeat 100000 1
+
+# default subtitle
+ffmpeg -i "in.mkv" -map 0 -c copy -disposition:6 default out.mkv
+# seek to 3s, duration 8s
+ffmpeg -ss 3 -t 8 -i "in.mkv" -map 0 -c copy out.mp4
+
+tail -f output > /dev/udp/127.0.0.1/50001
+nc -lu 50001
+ssh-copy-id root@<remote ip>
+ss -tulnp
+
+paccache --cachedir /mnt/hdd/packages/custom/ --verbose --remove --keep 1
+paccache --verbose --remove
+makepkg --printsrcinfo > .SRCINFO
+namcap -i PKGBUILD
+namcap -i <binary>
+repo-add custom.db.tar.gz custom/*tar*{zst,xz}
+mkarchroot $CHROOT/root base-devel
+arch-nspawn $CHROOT/root pacman -Syu
+gpg --recv-keys <key>
+gpg --delete-keys <key>
+
+
+# git
+git tag -a v0.1.0
+git rebase -i HEAD~5
+git submodule init
+git submodule update --recursive
+git diff > mypatch.patch
+git format-patch -1 HEAD
+git reflog
+git reset --hard "HEAD@{4}"

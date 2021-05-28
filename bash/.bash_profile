@@ -2,25 +2,22 @@
 # ~/.bash_profile
 #
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+if [[ -d "${HOME}/bin" ]]; then
+  PATH="${HOME}/bin:${PATH}"
 fi
 
-#if [ -d "$HOME/.gem/ruby/2.3.0/bin" ] ; then
-    #PATH="$HOME/.gem/ruby/2.3.0/bin:$PATH"
-#fi
-
-if [ -d "$HOME/.node/bin" ] ; then
-    PATH="$HOME/.node/bin:$PATH"
+if [[ -d "${HOME}/.local/bin" ]]; then
+  PATH="${HOME}/.local/bin:${PATH}"
 fi
 
-if [ -d "$HOME/.gem/ruby/2.5.0/bin" ] ; then
-    PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
+if command -v ruby &> /dev/null; then
+  gem_home="$(ruby -e 'puts Gem.user_dir')"
+  gem_bin="${gem_home}/bin"
+  if [[ -d "${gem_bin}" ]]; then
+    PATH="${gem_bin}:${PATH}"
+  fi
+  unset gem_bin
+  unset gem_home
 fi
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
-
-export PATH="$HOME/.cargo/bin:$PATH"
-
-source /home/user/.config/broot/launcher/bash/br

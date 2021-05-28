@@ -2,17 +2,10 @@
 	email = jusw85@hotmail.com
 	name = Justin Wong
 [credential]
-	helper = store
-[core]
-	excludesfile = ~/.gitignore
+	helper = store --file=\"${XDG_CONFIG_HOME}/git/credentials\"
 [gui]
 	fontui = -family \"Bitstream Vera Sans\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
 	fontdiff = -family \"Source Code Pro\" -size 10 -weight normal -slant roman -underline 0 -overstrike 0
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
 [diff]
     tool = meld
 [difftool]
@@ -25,3 +18,8 @@
     needsfile = yes
 [status]
     showUntrackedFiles = all
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

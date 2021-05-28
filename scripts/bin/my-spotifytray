@@ -1,0 +1,14 @@
+#!/bin/bash
+
+main() {
+  local spids spid
+
+  if ! spids=$(pgrep -x spotify) &> /dev/null; then
+    exit 1
+  fi
+
+  spid="$(echo "${spids}" | head -n 1)"
+  kdocker -x "${spid}" -i /usr/share/icons/hicolor/64x64/apps/spotify.png -q
+}
+
+main

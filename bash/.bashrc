@@ -2,133 +2,111 @@
 # ~/.bashrc
 #
 
+# https://github.com/progrium/bashstyle
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+
+stty -ixon -ixoff
+PS1='[\u@\h \W]\$ '
+eval "$(dircolors --bourne-shell)"
+
+
+# https://www.gnu.org/software/bash/manual/bash.html#Using-History-Interactively
+# https://www.gnu.org/software/bash/manual/bash.html#Bash-Variables
+# https://superuser.com/a/579811
+HISTSIZE=-1
+HISTFILESIZE=-1
+HISTCONTROL="ignoredups:erasedups"
+HISTTIMEFORMAT="[%F %T] "
+HISTFILE=~/.bash_eternal_history
+PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
+# trap "history -n; history -w; history -c; history -r" EXIT
+
+
+# https://www.gnu.org/software/gettext/manual/html_node/The-TERM-variable.html
+export EDITOR=vim
+export TERM=xterm-256color
+export LESSHISTFILE=/dev/null
+export JAVA_HOME="$(readlink -f /usr/bin/javac | sed "s:bin/javac::")"
+
+# https://wiki.archlinux.org/title/XDG_Base_Directory
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_DATA_HOME="${HOME}/.local/share"
+export GRADLE_USER_HOME="${XDG_DATA_HOME}/gradle"
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+
+
+# bind '"\er": redraw-current-line'
+bind '"\C-g\C-t": "\C-a$(\C-e|fzf --tac --no-sort)\e\C-e"'
+bind '"\C-g\C-g": "$(cheat p | fzf --tac --no-sort)\e\C-e"'
+
+
 alias ls='ls --color=auto'
 alias ll='ls -al'
-alias la='ls -Al'
 alias grep='grep --color=auto'
-alias mpsyt='mpsyt set player mpv'
 alias cal='cal -s'
 alias mux='tmuxinator'
 alias crontab='fcrontab'
-# alias chromium='chromium --disable-gpu-compositing'
+alias wget='wget --hsts-file="${XDG_CACHE_HOME}/wget-hsts"'
+
 
 aur() {
-  if [[ "$1" == "sync" ]]; then
-    command aur sync -c -D /mnt/hdd/packages/chroot/ --ignore-file=/home/user/.config/aurutils/ignore "$@"
-  elif [[ "$1" == "build" ]]; then
-    command aur build -c -D /mnt/hdd/packages/chroot/ "$@"
+  local op="$1"
+  if [[ "${op}" == "sync" || "${op}" == "build" ]]; then
+    shift
+    command aur "${op}" -c -D /mnt/hdd/packages/chroot/ "$@"
   else
     command aur "$@"
   fi
 }
+export -f aur
 
-PS1='[\u@\h \W]\$ '
 
-stty -ixon -ixoff
-if type "archey3" &> /dev/null; then
-  archey3
-fi
-if type "thefuck" &> /dev/null; then
-  eval $(thefuck --alias)
-  alias f='fuck'
-fi
-
-export TERM=xterm-256color
-export EDITOR="vim"
-export DIFFPROG="meld"
-export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:bin/javac::")
-export LESSHISTFILE=
-
-eval $(dircolors -b)
-
-# Eternal bash history.
-# ---------------------
-# Undocumented feature which sets the size to "unlimited".
-# http://stackoverflow.com/questions/9457233/unlimited-bash-history
-# http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
-export HISTFILESIZE=
-export HISTSIZE=
-export HISTTIMEFORMAT="[%F %T] "
-export HISTCONTROL="ignoredups:erasedups"
-# Change the file location because certain bash sessions truncate .bash_history file upon close.
-# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
-export HISTFILE=~/.bash_eternal_history
-# Force prompt to write history after every command.
-# http://superuser.com/questions/20900/bash-history-loss
-#PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
-
-# Force Eclipse to use GTK2
-export SWT_GTK3=0
-
-###-begin-npm-completion-###
-#
-# npm command completion script
-#
-# Installation: npm completion >> ~/.bashrc  (or ~/.zshrc)
-# Or, maybe: npm completion > /usr/local/etc/bash_completion.d/npm
-#
-
-COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
-COMP_WORDBREAKS=${COMP_WORDBREAKS/@/}
-export COMP_WORDBREAKS
-
-if type complete &>/dev/null; then
-  _npm_completion () {
-    local si="$IFS"
-    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
-                           COMP_LINE="$COMP_LINE" \
-                           COMP_POINT="$COMP_POINT" \
-                           npm completion -- "${COMP_WORDS[@]}" \
-                           2>/dev/null)) || return $?
-    IFS="$si"
-  }
-  complete -o default -F _npm_completion npm
-elif type compdef &>/dev/null; then
-  _npm_completion() {
-    local si=$IFS
-    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
-                 COMP_LINE=$BUFFER \
-                 COMP_POINT=0 \
-                 npm completion -- "${words[@]}" \
-                 2>/dev/null)
-    IFS=$si
-  }
-  compdef _npm_completion npm
-elif type compctl &>/dev/null; then
-  _npm_completion () {
-    local cword line point words si
-    read -Ac words
-    read -cn cword
-    let cword-=1
-    read -l line
-    read -ln point
-    si="$IFS"
-    IFS=$'\n' reply=($(COMP_CWORD="$cword" \
-                       COMP_LINE="$line" \
-                       COMP_POINT="$point" \
-                       npm completion -- "${words[@]}" \
-                       2>/dev/null)) || return $?
-    IFS="$si"
-  }
-  compctl -K _npm_completion npm
-fi
-###-end-npm-completion-###
-
-function colorecho {
-    echo "$(tput setaf 6)$(tput bold)$1$(tput sgr0)"
+whichpkg() {
+  local arg="$1"
+  if command -v "${arg}" &> /dev/null; then
+    arg="$(which "$1")"
+  fi
+  pacman -Qo "${arg}"
 }
 
-# if [ -d "$HOME/local/bin" ] ; then
-#     PATH="$PATH:$HOME/local/bin"
-# fi
-# export PYTHONPATH="/home/user/local/lib/python3.5/site-packages"
 
-if [ -f /usr/bin/virtualenvwrapper.sh ]; then
-    source /usr/bin/virtualenvwrapper.sh
+# https://wiki.archlinux.org/title/Fzf#bash
+if [ -f /usr/share/fzf/key-bindings.bash ]; then
+  source /usr/share/fzf/key-bindings.bash
 fi
 
-source /home/user/.config/broot/launcher/bash/br
+if [ -f /usr/share/fzf/completion.bash ]; then
+  source /usr/share/fzf/completion.bash
+fi
+
+
+# https://github.com/cheat/cheat#advanced-usage
+export CHEAT_USE_FZF=true
+
+
+# This script was automatically generated by the broot program
+# More information can be found in https://github.com/Canop/broot
+# This function starts broot and executes the command
+# it produces, if any.
+# It's needed because some shell commands, like `cd`,
+# have no useful effect if executed in a subshell.
+function br {
+    local cmd cmd_file code
+    cmd_file=$(mktemp)
+    if broot --outcmd "$cmd_file" "$@"; then
+        cmd=$(<"$cmd_file")
+        rm -f "$cmd_file"
+        eval "$cmd"
+    else
+        code=$?
+        rm -f "$cmd_file"
+        return "$code"
+    fi
+}

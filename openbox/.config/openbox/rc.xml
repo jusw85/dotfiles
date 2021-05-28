@@ -39,7 +39,8 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>Adapta</name>
+    <!-- <name>Adapta</name> -->
+    <name>Clearlooks</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
@@ -352,10 +353,11 @@
     <keybind key="W-e">
       <action name="Execute">
         <startupnotify>
-          <enabled>true</enabled>
-          <name>pcmanfm</name>
+          <enabled>yes</enabled>
+          <!-- <name>pcmanfm</name> -->
         </startupnotify>
-        <command>pcmanfm</command>
+        <!-- <command>pcmanfm</command> -->
+        <command>thunar</command>
       </action>
     </keybind>
     <!-- <keybind key="W-r">
@@ -365,18 +367,19 @@
     </keybind> -->
     <keybind key="W-r">
       <action name="Execute">
-        <command>rofi -show drun -modi drun,run,window,ssh</command>
+        <command>rofi -show drun -modi drun,run,window,ssh -drun-match-fields name</command>
       </action>
     </keybind>
     <keybind key="W-t">
       <action name="Execute">
-        <command>terminator</command>
+        <command>terminator --new-tab</command>
       </action>
     </keybind>
     <keybind key="W-l">
       <action name="Execute">
         <!-- <command>xset dpms force off</command> -->
-        <command>xscreensaver-command -lock</command>
+        <!-- <command>xscreensaver-command -lock</command> -->
+        <command>my-sleep</command>
       </action>
     </keybind>
     <keybind key="W-A-Right">
@@ -840,7 +843,7 @@
   # order that they appear in this list
 
 
-    # each rule element can be left out or set to 'default' to specify to not 
+    # each rule element can be left out or set to 'default' to specify to not
     # change that attribute of the window
 
     <decor>yes</decor>

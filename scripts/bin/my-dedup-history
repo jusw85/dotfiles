@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+# https://antofthy.gitlab.io/software/history_merge.bash.txt
+use strict;
+use warnings;
+
+my %ts_commands;
+my %command_ts;
+
+local $/;
+while (<>) {
+    for ( split /^#(?=\d+$)/m ) {
+        next unless length;
+
+        my ( $timestamp, $command ) = split /^/;
+        $timestamp =~ s/^\s+|\s+$//;
+        $command   =~ s/^\s+|\s+$//;
+        next unless length $command;
+
+        # next if $command =~ /^(ls|ll|cd)\b/;
+        # next if $command =~ /^wine\b/;
+        # next if $command =~ /^less\b/;
+        # next if $command =~ /^man\b/;
+        # next if $command =~ /^g?unzip\b/;
+        # next if $command =~ /^rm/;
+        # next if $command =~ /^wget\b/;
+        # next if $command =~ /^vim/;
+        # next if $command =~ /^kill/;
+        # next if $command =~ /^cat/;
+        # next if $command =~ /^echo/;
+        next unless $command =~ /#/;
+
+        if ( exists $command_ts{$command} ) {
+            my $old_timestamp = $command_ts{$command};
+            next if $timestamp < $old_timestamp;
+            my $command_ref = $ts_commands{$old_timestamp};
+            @{$command_ref} = grep { $_ ne $command } @{$command_ref};
+        }
+
+        $ts_commands{$timestamp} = [] unless exists $ts_commands{$timestamp};
+        push @{ $ts_commands{$timestamp} }, $command;
+
+        $command_ts{$command} = $timestamp;
+    }
+}
+
+for my $timestamp ( sort { $a <=> $b } keys %ts_commands ) {
+    for my $command ( @{ $ts_commands{$timestamp} } ) {
+        print "#$timestamp\n";
+        print "$command\n";
+    }
+}
