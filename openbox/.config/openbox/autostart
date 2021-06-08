@@ -38,8 +38,9 @@ thunar --daemon &
 # redshift-gtk &
 redshift -P -O 3000
 
-# xset m 1 1
-# xinput --set-prop "pointer:Razer Razer Abyssus 1800" "libinput Accel Speed" -0.5
-# xinput list-props  "pointer:Razer Razer Abyssus 1800"
+
+# set xorg screensaver to 5 minute delay
+xset s 300
+
 xinput --set-prop "pointer:Razer Razer Abyssus 1800" 'libinput Accel Profile Enabled' 0, 1
-xinput --set-prop "pointer:Razer Razer Abyssus 1800" 'Coordinate Transformation Matrix' 0.65 0 0 0 0.65 0 0 0 1
+xinput --set-prop "pointer:Razer Razer Abyssus 1800" 'Coordinate Transformation Matrix' 0.50 0 0 0 0.50 0 0 0 1

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<unique-id>1587447613844268-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Example for a custom action</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+</action>
+<action>
+	<icon>terminator</icon>
+	<name>Open Terminal Here</name>
+	<unique-id>1588493643887964-1</unique-id>
+	<command>terminator --new-tab --working-directory=%f</command>
+	<description></description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>/usr/share/git-gui/lib/git-gui.ico</icon>
+	<name>Git Gui</name>
+	<unique-id>1588051424759789-1</unique-id>
+	<command>git gui</command>
+	<description></description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+<action>
+	<icon></icon>
+	<name>Extract to folder</name>
+	<unique-id>1588056211611918-1</unique-id>
+	<command>for file in %F; do dir=&quot;${file%%.*}&quot;; file-roller --extract-to=&quot;${dir}&quot; --force &quot;${file}&quot;; done</command>
+	<description></description>
+	<patterns>*.zip;*.rar;*.tar;*.7z;*.tgz;*.gz</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon></icon>
+	<name>Make executable</name>
+	<unique-id>1621443981606629-1</unique-id>
+	<command>chmod +x %f</command>
+	<description></description>
+	<patterns>*</patterns>
+	<other-files/>
+</action>
+</actions>
